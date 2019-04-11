@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~  Copyright (c) 2017 . Tencent 蓝鲸智云(BlueKing)
+  -->
+
+<!--
+  ～ 请不要修改或删除或格式化本文件，只读的，否则 日志格式将会乱掉
+  ～     1.在本地开发环境建议不用打日志文件，通过控制台CONSOLE来查看，
+  ～     2.如本地开发环境需要记录日志文件，则建议通过设置系统环境变量 BK_LOG_DIR 和 APP_ID 来决定日志生成的日志位置
+  -->
+<included>
+
+    <include resource="logback-core.xml"/>
+
+    <!-- spring boot 默认的全局logback配置，不要改名，可增加或者修改level,但请不要删除/改名，可以增加其他logger -->
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+    <conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
+    <conversionRule conversionWord="wEx" converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
+
+    <appender name="DEBUG_LEVEL_REMAPPER" class="org.springframework.boot.logging.logback.LevelRemappingAppender">
+        <destinationLogger>org.springframework.boot</destinationLogger>
+    </appender>
+
+    <logger name="org.apache.catalina.startup.DigesterFactory" level="ERROR"/>
+    <logger name="org.apache.catalina.util.LifecycleBase" level="ERROR"/>
+    <logger name="org.apache.coyote.http11.Http11NioProtocol" level="WARN"/>
+    <logger name="org.apache.sshd.common.util.SecurityUtils" level="WARN"/>
+    <logger name="org.apache.tomcat.util.net.NioSelectorPool" level="WARN"/>
+    <logger name="org.crsh.plugin" level="WARN"/>
+    <logger name="org.crsh.ssh" level="WARN"/>
+    <logger name="org.eclipse.jetty.util.component.AbstractLifeCycle" level="ERROR"/>
+    <logger name="org.hibernate.validator.internal.util.Version" level="WARN"/>
+    <logger name="org.springframework.boot.actuate.autoconfigure.CrshAutoConfiguration" level="WARN"/>
+    <logger name="org.springframework.boot.actuate.endpoint.jmx" additivity="false">
+        <appender-ref ref="DEBUG_LEVEL_REMAPPER"/>
+    </logger>
+    <logger name="org.thymeleaf" additivity="false">
+        <appender-ref ref="DEBUG_LEVEL_REMAPPER"/>
+    </logger>
+    <!-- Spring Boot 结束 -->
+
+    <!-- 主要的日志文件APPENDER 不要修改 -->
+    <appender name="FRAMEWORK_LOG"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <!--PaaS平台要求的日志格式JSON，为了方便日志收集，请不要格式化或者修改或者换行-->
+            <pattern>{"asctime":"%d{"yyyy-MM-dd'T'HH:mm:ss,SSSXXX", UTC}","levelname":"%p","funcName":"[%logger{39}.%M:%line]", "process":${PID:- }, "thread": "[%t]","message":"%replace(%replace(%m\\n%ex){'"', '\\"'}){'\n', '\\n'}"}%n%nopex</pattern>
+        </encoder>
+        <file>${FRAMEWORK_LOG_FILE}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>${FRAMEWORK_LOG_FILE}.%i</fileNamePattern>
+        </rollingPolicy>
+        <triggeringPolicy
+                class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>10MB</MaxFileSize>
+        </triggeringPolicy>
+    </appender>
+
+    <appender name="APP_LOG"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <!--PaaS平台要求的日志格式JSON，为了方便日志收集，请不要格式化或者修改或者换行-->
+            <pattern>{"asctime":"%d{"yyyy-MM-dd'T'HH:mm:ss,SSSXXX", UTC}","levelname":"%p","funcName":"[%logger{39}.%M:%line]", "process":${PID:- }, "thread": "[%t]","message":"%replace(%replace(%m\\n%ex){'"', '\\"'}){'\n', '\\n'}"}%n%nopex</pattern>
+        </encoder>
+        <file>${APP_LOG_FILE}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>${APP_LOG_FILE}.%i</fileNamePattern>
+        </rollingPolicy>
+        <triggeringPolicy
+                class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>10MB</MaxFileSize>
+        </triggeringPolicy>
+    </appender>
+
+</included>

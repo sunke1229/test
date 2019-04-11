@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <!-- parent 定义模块所依赖的, 不要改动，否则会引用不到正确的蓝鲸SDK -->
+    <parent>
+        <groupId>com.tencent.blueking</groupId>
+        <artifactId>bksdk</artifactId>
+        <relativePath>../bksdk/pom.xml</relativePath>
+        <version>0.2.8</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>webproject</artifactId>
+    <packaging>war</packaging>
+
+    <properties>
+        <!-- 在蓝鲸智云开发者中心 -> 点击应用ID -> 基本信息 中获取 APP_ID
+                最终出包将以APP_ID作为标识命名  -->
+        <pkg.app.id>test-sk</pkg.app.id>
+
+        <!-- 此处修改为你的SpringBoot 启动类，也可直接用默认的 -->
+        <mainClass>com.tencent.examples.BkWebApplication</mainClass>
+
+        <!-- 依赖库/框架版本定义 -->
+        <!--<lib.guava.version>19.0</lib.guava.version>-->
+
+    </properties>
+
+    <dependencies>
+        <!-- ############# spring boot dependencies ########################## -->
+        <!-- Web项目Spring Boot依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!-- 数据库操作jpa 依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!-- #END spring boot dependencies ########################## -->
+
+        <!-- ############# Blueking sdk dependencies ########################## -->
+        <dependency>
+            <groupId>com.tencent.blueking</groupId>
+            <artifactId>bkcore</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.tencent.blueking</groupId>
+            <artifactId>bkweb</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.tencent.blueking</groupId>
+            <artifactId>bkapiv1</artifactId>
+        </dependency>
+        <!-- #END 蓝鲸blueking dependencies ########################## -->
+
+
+        <!-- Spring 统一会话框架 -->
+        <dependency>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session</artifactId>
+        </dependency>
+        <!-- #END spring  dependencies ########################## -->
+
+        <!-- 日志组件 -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-access</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+        </dependency>
+        <!-- 如果项目有JSP页面，这个必须单独引入，spring-boot-starter-tomcat 不会引入这个lib -->
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+        </dependency>
+        <!-- #END servlet/jsp dependencies ########################## -->
+
+        <dependency>
+            <groupId>org.sitemesh</groupId>
+            <artifactId>sitemesh</artifactId>
+        </dependency>
+
+        <!-- ############# tool/help dependencies ########################## -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+        <!-- Bean的getter setter construtor ，tostring等代码生成的库 -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+        </dependency>
+
+
+
+        <!-- mysql driver -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+
+        <!-- 如果不想用migration 自动升级数据库，请注释掉下面依赖,并且将application.properties的flyway.enabled设置为false -->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
+
+        <!-- ############# dev/test framework ########################## -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- 测试用例断言library -->
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <!-- ############# 引入构建插件 ########################## -->
+    <build>
+        <finalName>${project.name}</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+            <!-- 不要改动，前端静态资源优化迁移部署 -->
+            <resource>
+                <directory>src/main/webapp/static</directory>
+                <targetPath>../static</targetPath>
+            </resource>
+        </resources>
+        <!-- 不要改动，这个是为了让蓝鲸构建自动化部署时在根目录上找到构建包，所以提升到项目一级目录 -->
+        <directory>../target</directory>
+
+        <plugins>
+            <!--  引用SpringBoot构建插件 -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <!-- 引用构建原生War包插件  -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+            </plugin>
+
+            <!-- 引用构建分发包的插件 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+            </plugin>
+
+            <!-- 引用数据库自动变更插件 -->
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

@@ -1,0 +1,6 @@
+SET NAMES UTF8;
+
+ALTER TABLE `user` ADD COLUMN  chname VARCHAR(16);
+--  增加语言
+ALTER TABLE `user` ADD COLUMN  lang VARCHAR(6) DEFAULT  'zh_CN';
+

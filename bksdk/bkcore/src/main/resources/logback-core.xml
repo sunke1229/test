@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~  Copyright (c) 2017 . Tencent 蓝鲸智云(BlueKing)
+  -->
+
+<included>
+    <!--
+      ～ 请不要修改或删除或格式化本文件，只读的，否则 日志格式将会乱掉
+      ～     1.在本地开发环境建议不用打日志文件，通过控制台CONSOLE来查看，
+      ～     2.如本地开发环境需要记录日志文件，则建议通过设置系统环境变量 BK_LOG_DIR 和 APP_ID 来决定日志生成的日志位置
+      -->
+
+    <!-- 禁止修改，建议通过设置系统环境变量 BK_LOG_DIR 和 APP_ID 来决定日志生成的日志位置-->
+    <property name="BK_LOG_DIR" value="${BK_LOG_DIR:-/data/paas/apps/logs/}/${APP_ID:-${app.id}}"/>
+    <property name="APP_LOG_FILE" value="${BK_LOG_DIR}/java_app.log"/>
+    <property name="FRAMEWORK_LOG_FILE" value="${BK_LOG_DIR}/java_framework.log"/>
+    <property name="ACCESS_LOG_FILE" value="${BK_LOG_DIR}/java_access.log"/>
+
+</included>

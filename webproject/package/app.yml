@@ -1,0 +1,27 @@
+# # 升级为 Smart 应用信息需要填写的清单 ##
+language: java
+# 请跟运营确认app_code，app_name, introduction, author等
+# Smart应用id
+app_code: bkjava
+# Smart应用名称
+app_name: java开发框架Smart
+# 应用开发商 创建者： 蓝鲸智云、嘉为蓝鲸、皓西科技、红雨创展、齐治科技、用户自建、其它 (内部开发的公共app用：蓝鲸智云)
+#（官方和这几个合作伙伴要内置进去，有应用的话显示该分类，没有的话不显示；配置平台和作业平台，属于“蓝鲸官方”）
+author: 蓝鲸智云
+# Smart应用的描述
+introduction: Smart for java
+# 版本号自行维护, 每次修改变更, 必须更新版本号
+version: 2.0.0
+# 分类, 具体有: 运维工具, 监控告警, 配置管理, 开发工具, 企业IT, 办公应用, 其他
+category: 开发工具
+# 支持语言, 涉及到多语言支持的，英语、日语、韩语, 逗号分隔字符串
+language_support: 英语
+# 桌面属性, 目前支持设置应用窗口大小 width/height, is_max是否最大化
+desktop:
+    width: 1200
+    height: 720
+    is_max: True
+# 如果有限定该应用必须在某个平台版本, 需要加入平台版本参数,非必填
+# platform_version: 3.0.0
+
+# 以下最后一行的空行不能被删除，否则会导致Smart包上传解析失败

@@ -1,0 +1,47 @@
+<!--
+  ~  Copyright (c) 2017 . Tencent 蓝鲸智云(BlueKing)
+  -->
+
+<configuration>
+
+    <!-- spring boot 默认的全局logback配置，不要改名，可增加或者修改level,但请不要删除/改名，可以增加其他logger -->
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+    <conversionRule conversionWord="wex"
+                    converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
+    <conversionRule conversionWord="wEx"
+                    converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
+
+    <appender name="DEBUG_LEVEL_REMAPPER" class="org.springframework.boot.logging.logback.LevelRemappingAppender">
+        <destinationLogger>org.springframework.boot</destinationLogger>
+    </appender>
+
+    <logger name="org.apache.catalina.startup.DigesterFactory" level="ERROR"/>
+    <logger name="org.apache.catalina.util.LifecycleBase" level="ERROR"/>
+    <logger name="org.apache.coyote.http11.Http11NioProtocol" level="ERROR"/>
+    <logger name="org.apache.sshd.common.util.SecurityUtils" level="ERROR"/>
+    <logger name="org.apache.tomcat.util.net.NioSelectorPool" level="ERROR"/>
+    <logger name="org.crsh.plugin" level="ERROR"/>
+    <logger name="org.crsh.ssh" level="ERROR"/>
+    <logger name="org.eclipse.jetty.util.component.AbstractLifeCycle" level="ERROR"/>
+    <logger name="org.hibernate.validator.internal.util.Version" level="ERROR"/>
+    <logger name="org.springframework.boot.actuate.endpoint.jmx" additivity="false">
+        <appender-ref ref="DEBUG_LEVEL_REMAPPER"/>
+    </logger>
+    <logger name="org.thymeleaf" additivity="false">
+        <appender-ref ref="DEBUG_LEVEL_REMAPPER"/>
+    </logger>
+
+
+    <!-- 控制台日志logger 用于本地开发环境使用，不建议追加到生产或测试环境，影响性能 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!--PaaS平台要求的日志格式JSON，为了方便日志收集，请不要格式化或者修改或者换行,保持与FILE一样-->
+            <pattern>{"asctime":"%d{"yyyy-MM-dd HH:mm:ss,SSS"}","levelname":"%p","funcName":"[%logger{39}.%M:%line]", "process":${PID:- }, "thread": "[%t]","message":"%replace(%replace(%m\\n%ex){'"', '\\"'}){'\n', '\\n'}"}%n%nopex</pattern>
+            <charset>utf8</charset>
+        </encoder>
+    </appender>
+
+    <root level="DEBUG">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>

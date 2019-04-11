@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+<!-- 出外网代理
+    <proxies>
+        <proxy>
+            <id>HTTP Proxy</id>
+            <active>true</active>
+            <protocol>http</protocol>
+            <host></host>
+            <port></port>
+            <username></username>
+            <password></password>
+            <nonProxyHosts>localhost,127.0.0.1</nonProxyHosts>
+        </proxy>
+    </proxies>
+    -->
+
+    <!--
+        填写Maven私服帐号与密码
+        id要与要激活的profile的id保持一样 ，并放开这个注释
+    <servers>
+        <server>
+            <id>mavenRepo</id>
+            <username>username</username>
+            <password>password</password>
+        </server>
+    </servers>
+    -->
+
+    <profiles>
+        <profile>
+            <id>mavenRepo</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <repositories>
+                <repository>
+                    <id>mavenRepo</id>
+                    <url>http://repo1.maven.org/maven2</url>
+                </repository>
+            </repositories>
+        </profile>
+
+    </profiles>
+
+</settings>

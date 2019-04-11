@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2017. Tencent BlueKing
+
+  ~ 主日志配置文件，可按以下提示修改
+  -->
+
+<configuration>
+
+    <include resource="logback-framework.xml"/>
+
+    <!-- 控制台日志logger 用于本地开发环境使用，不要追加到生产或测试环境，影响性能 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!--PaaS平台要求的日志格式JSON，为了方便日志收集，请不要格式化或者修改或者换行,保持与FILE一样-->
+            <pattern>{"asctime":"%d{"yyyy-MM-dd HH:mm:ss,SSS"}","levelname":"${LOG_LEVEL_PATTERN:-%p}","funcName":"%logger{39}.%M:%line", "process":${PID:- }, "thread": "[%t]","message":"%replace(%m%ex){'"', '\\"'}"}%n%nopex</pattern>
+            <charset>utf8</charset>
+        </encoder>
+    </appender>
+
+    <!--开发环境日志配置 日志等级可根据自行业务决定做适当的修改处理,增加logger-->
+    <springProfile name="development"> <!-- 本地开发环境 -->
+        <!-- 可以根据自己的业务类包追加logger和日志等级 -->
+        <logger name="com.tencent.examples" level="DEBUG" additivity="false">
+            <appender-ref ref="CONSOLE"/> <!--打屏日志，在开发时才有用，在生产和测试环境千万要关掉不要使用打屏日志 -->
+        </logger>
+        <root level="INFO"> <!-- Spring等框架类的日志级别 如DEBUG主要是为了开发初上手方便查看到各种日志，自由更换-->
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+
+    <!-- 线上测试环境 -->
+    <springProfile name="testing">
+        <!-- 可以根据自己的业务类包追加logger和日志等级-->
+        <logger name="com.tencent" level="DEBUG" additivity="false">
+            <appender-ref ref="APP_LOG"/> <!--测试环境是部署在服务器环境上，将日志打在日志文件中，为日志收集器统一相应的日志-->
+        </logger>
+
+        <logger name="com.tencent.bk" level="WARN" additivity="false">
+            <appender-ref ref="FRAMEWORK_LOG"/>
+        </logger>
+        <root level="WARN"> <!-- Spring等框架类的日志级别 生产一般是稳定环境用WARN，根据自已情况决定-->
+            <appender-ref ref="FRAMEWORK_LOG"/>
+        </root>
+    </springProfile>
+
+    <!-- 线上生产环境  -->
+    <springProfile name="production">
+        <!-- 可以根据自己的业务类包追加logger和日志等级 -->
+        <logger name="com.tencent.examples" level="INFO" additivity="false">
+            <appender-ref ref="APP_LOG"/>
+        </logger>
+
+        <logger name="com.tencent.bk" level="INFO" additivity="false">
+            <appender-ref ref="FRAMEWORK_LOG"/>
+        </logger>
+        <root level="WARN"> <!-- Spring等框架类的日志级别 生产一般是稳定环境用WARN，根据自已情况决定-->
+            <appender-ref ref="FRAMEWORK_LOG"/>
+        </root>
+    </springProfile>
+</configuration>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~  Copyright (c) 2017 . Tencent 蓝鲸智云(BlueKing)
+  -->
+
+<configuration>
+    <!--
+      ～ 请不要修改或删除或格式化本文件，只读的，否则 日志格式将会乱掉
+      ～ 此为访问日志 log
+      -->
+    <statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener"/>
+
+    <include resource="logback-core.xml"/>
+
+
+    <!--
+    %a - Remote IP address
+    %A - Local IP address
+    %b - Bytes sent, excluding HTTP headers, or '-' if zero
+    %B - Bytes sent, excluding HTTP headers
+    %h - Remote host name (or IP address if resolveHosts is false)
+    %H - Request protocol
+    %l - Remote logical username from identd (always returns '-')
+    %m - Request method (GET, POST, etc.)
+    %p - Local port on which this request was received
+    %q - Query string (prepended with a '?' if it exists)
+    %r - First line of the request (method and request URI)
+    %s - HTTP status code of the response
+    %S - User session ID
+    %t - Date and time, in Common Log Format
+    %u - Remote user that was authenticated (if any), else '-'
+    %U - Requested URL path
+    %v - Local server name
+    %D - Time taken to process the request, in millis
+    %T - Time taken to process the request, in seconds
+    %I - current request thread name (can compare later with stacktraces)
+    -->
+
+    <appender name="ACCESS_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <!--PaaS平台要求的日志格式JSON，为了方便日志收集，请不要格式化或者修改或者换行-->
+            <pattern>{"asctime":"%t{"yyyy-MM-dd'T'HH:mm:ss,SSSXXX", UTC}","levelname":"INFO","funcName":"%U","status": "%s","ip":"%h", "method": "%m", "byte": "%b", "refer": "%i{Referer}", "process": 0, "ua": "%i{User-Agent}","user":"%u","domain": "%v", "thread": "[%I]","message":"%replace(%r){'"', '\\"'}"}%n</pattern>
+        </encoder>
+        <file>${ACCESS_LOG_FILE}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>${ACCESS_LOG_FILE}.%i</fileNamePattern>
+        </rollingPolicy>
+        <triggeringPolicy
+                class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>10MB</MaxFileSize>
+        </triggeringPolicy>
+    </appender>
+
+    <appender-ref ref="ACCESS_LOG"/>
+</configuration>

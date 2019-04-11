@@ -1,0 +1,48 @@
+<!--
+  ~ Copyright (c) 2017. Tencent BlueKing
+   打包描述文件，以下内容不要修改
+  -->
+<assembly>
+    <id>bin</id>
+    <formats>
+        <format>${pkg.format}</format>
+    </formats>
+    <fileSets>
+
+        <!-- ============  以下内容不要修改 ============  -->
+        <fileSet>
+            <directory>${project.build.scriptSourceDirectory}</directory>
+            <outputDirectory/>
+        </fileSet>
+
+        <!--  ============   将war 包一并打进 不要修改  ============  -->
+        <fileSet>
+            <directory>${project.build.directory}</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>${pkg.app.id}-exec.war</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>src/main/webapp/static</directory>
+            <outputDirectory>/static</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>package/scripts</directory>
+            <outputDirectory>/bin</outputDirectory>
+            <fileMode>0755</fileMode>
+        </fileSet>
+
+        <fileSet>
+            <directory>package</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <!-- 应用的logo -->
+                <include>${pkg.app.id}.png</include>
+                <!-- smart 应用 描述文件 -->
+                <include>app.yml</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+
+</assembly>
